@@ -12,7 +12,7 @@ ships = []
 
 def check_params():
 	if len(sys.argv) < 5:
-		print "Usage: " + str(sys.argv[0] + " <ore> <energy> <base1-base2> <ship1-ship2>"
+		print "Usage: " + str(sys.argv[0]) + " <ore> <energy> <base1-base2> <ship1-ship2>"
 		sys.exit()
 	return
 
@@ -33,7 +33,7 @@ def print_stats():
 	print "Bmat: " + str(bmat)
 	print "Energy: " + str(energy)
 	
-def get_event(number)
+def get_event(number):
 	global bases, ships, ore, energy, bmat
 	if number == 1:
 		print "Stuff happens"
@@ -41,15 +41,21 @@ def get_event(number)
 		
 
 def build():
+	print "Called build"
 
 def process():	
+	print "Called process"
 
-def run()
-	my_input = raw_input("Dude enter something (go, build, process, show): ")
+def run():
+	global bases, ships, ore, energy, bmat
+	global myInput
+	myInput = raw_input("Dude enter something (go, build, process, show): ")
 	while myInput != 'exit' and myInput != 'bye' and myInput != 'quit':
 		if myInput == 'process' or myInput == 'p':
 			process()
-		my_input = raw_input("Dude enter something (go, build, process, show): ")
+		if myInput == 'show' or myInput == 's':
+			print_stats()
+		myInput = raw_input("Dude enter something (go, build, process, show): ")
 	print "Seeeee ya"
 
 # initialize stuff
