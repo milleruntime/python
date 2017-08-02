@@ -3,6 +3,7 @@ import os
 import sys
 import random
 import time
+from MyEvent import MyEvent
 
 ore = 0
 bmat = 0
@@ -33,12 +34,10 @@ def print_stats():
 	print "Bmat: " + str(bmat)
 	print "Energy: " + str(energy)
 	
-def get_event(number):
+def get_event():
 	global bases, ships, ore, energy, bmat
-	if number == 1:
-		print "Stuff happens"
-
-		
+	eve = MyEvent(1)
+	eve.start()
 
 def build():
 	print "Called build"
@@ -55,6 +54,10 @@ def run():
 			process()
 		if myInput == 'show' or myInput == 's':
 			print_stats()
+		if myInput == 'build' or myInput == 'b':
+			build()
+		if myInput == 'go' or myInput == 'g':
+			get_event()
 		myInput = raw_input("Dude enter something (go, build, process, show): ")
 	print "Seeeee ya"
 
