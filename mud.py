@@ -10,6 +10,7 @@ bmat = 0
 energy = 0
 bases = []
 ships = []
+events = []
 
 def check_params():
 	if len(sys.argv) < 5:
@@ -33,17 +34,24 @@ def print_stats():
 	print "Ore: " + str(ore)
 	print "Bmat: " + str(bmat)
 	print "Energy: " + str(energy)
+	print "Events: " + str(events)
 	
 def get_event():
 	global bases, ships, ore, energy, bmat
-	eve = MyEvent(1)
+	eve = MyEvent(10)
 	eve.start()
+	events.append(eve)
 
 def build():
 	print "Called build"
 
 def process():	
+	global events
 	print "Called process"
+	for i, val in enumerate(events):
+		print(i, val)
+	p = raw_input("What event(##) would you like to process? ")
+	print "Deal with " + str(events[int(p)])
 
 def run():
 	global bases, ships, ore, energy, bmat
