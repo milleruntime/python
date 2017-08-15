@@ -11,12 +11,57 @@ class Mud:
 	energy = 0
 	bases = []
 	ships = []
+	space = []
 	events = []
 
 	@staticmethod
 	def newEvent(maxPower):
 		eve = MyEvent(maxPower)
 		Mud.events.append(eve)
+		eve.start()
+
+class Actions:
+	def dock(self):
+        	print "called dock"    
+
+	def build(self):
+	        print "Called build"
+
+	def process(self):
+		if len(Mud.events) > 0:
+			sel = prompt_index(Mud.events, "process")
+	       		Mud.events[sel].start()
+		 	Mud.ore += Mud.events.pop(sel).process()
+			print 'You now have ' + str(Mud.ore) + ' ore.'
+			if Mud.ore >= 10:
+				o = raw_input("Would you like to process 10 ore into building material? ")
+				if o == 'y' or o == 'yes':
+					print 'Processing raw ore into building material...'
+					Mud.ore = Mud.ore - 10
+					Mud.bmat += random.randint(1,3)
+		else:
+			print "No events to process"
+		self.show()
+
+	def go(self):
+        	if len(Mud.ships) > 0:
+                	sel = prompt_index(Mud.ships, "space")
+	                Mud.space.append(Mud.ships.pop(sel))
+			self.show()
+	        if random.randint(1,3) == 3:
+        	        print "A space event is occurring!!"
+                	Mud.newEvent(10)
+        	else:
+                	print "Nothing interesting happening"
+
+	def show(self):
+		print "Bases: " + str(Mud.bases)
+		print "Ships: " + str(Mud.ships)
+		print "Ore: " + str(Mud.ore)
+		print "Bmat: " + str(Mud.bmat)
+		print "Energy: " + str(Mud.energy)
+		print "Events: " + str(Mud.events)
+		print "Space: " + str(Mud.space)
 
 def check_params():
 	if len(sys.argv) < 5:
@@ -32,50 +77,27 @@ def load_params():
 	shipstr = str(sys.argv[4])
 	Mud.ships = shipstr.split("-")
 
-def print_stats():
-	print "Bases: " + str(Mud.bases)
-	print "Ships: " + str(Mud.ships)
-	print "Ore: " + str(Mud.ore)
-	print "Bmat: " + str(Mud.bmat)
-	print "Energy: " + str(Mud.energy)
-	print "Events: " + str(Mud.events)
 
 def display_timer():
 	for i in range(0,5):
 		print "."
 		time.sleep(1)
 	print "."
-	
-def get_event():
-	Mud.newEvent(10)
 
-def build():
-	print "Called build"
-
-def process():
-	print "Called process"
-	for i, val in enumerate(Mud.events):
+def prompt_index(mylist, actionName):
+	for i, val in enumerate(mylist):
 		print(i, val)
-	p = raw_input("What event(##) would you like to process? ")
-	sel = int(p)
-	Mud.events[sel].start()
-	display_timer()
-	Mud.ore += Mud.events[sel].process()
-	del Mud.events[sel]
-	print_stats()
+	p = raw_input("Which (##) would you like to " + actionName + "? ")
+	return int(p)
+	
 
 def run():
-	myInput = raw_input("Dude enter something (go, build, process, show): ")
+	prompt = "Dude enter something (go, build, dock, show): "
+	myInput = raw_input(prompt)
 	while myInput != 'exit' and myInput != 'bye' and myInput != 'quit':
-		if myInput == 'process' or myInput == 'p':
-			process()
-		if myInput == 'show' or myInput == 's':
-			print_stats()
-		if myInput == 'build' or myInput == 'b':
-			build()
-		if myInput == 'go' or myInput == 'g':
-			get_event()
-		myInput = raw_input("Dude enter something (go, build, process, show): ")
+		method = getattr(Actions, myInput)
+		method(Actions())
+		myInput = raw_input(prompt)
 	print "Seeeee ya"
 
 # initialize stuff
