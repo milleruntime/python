@@ -22,10 +22,22 @@ class Mud:
 
 class Actions:
 	def dock(self):
-        	print "called dock"    
+                if len(Mud.space) > 0:
+                    sel = prompt_index(Mud.space, "dock")
+                    Mud.ships.append(Mud.space.pop(sel))
+                    self.show()
+                else:
+                    print "No ships in space"
+
 
 	def build(self):
-	        print "Called build"
+                if len(Mud.bmat) > 9:
+	            p = raw_input("Enter the name of your new ship: ")
+                    Mud.ships.append(p)
+                    Mud.bmat -= 10
+                else:
+                    print "You don't have enough building material"
+
 
 	def process(self):
 		if len(Mud.events) > 0:
@@ -77,12 +89,6 @@ def load_params():
 	shipstr = str(sys.argv[4])
 	Mud.ships = shipstr.split("-")
 
-
-def display_timer():
-	for i in range(0,5):
-		print "."
-		time.sleep(1)
-	print "."
 
 def prompt_index(mylist, actionName):
 	for i, val in enumerate(mylist):
