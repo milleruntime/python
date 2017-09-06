@@ -31,13 +31,15 @@ class Actions:
 
 
 	def build(self):
-                if len(Mud.bmat) > 9:
+                if Mud.bmat > 9:
 	            p = raw_input("Enter the name of your new ship: ")
                     Mud.ships.append(p)
                     Mud.bmat -= 10
                 else:
                     print "You don't have enough building material"
 
+        def proc(self):
+            self.process()
 
 	def process(self):
 		if len(Mud.events) > 0:
@@ -45,21 +47,23 @@ class Actions:
 	       		Mud.events[sel].start()
 		 	Mud.ore += Mud.events.pop(sel).process()
 			print 'You now have ' + str(Mud.ore) + ' ore.'
-			if Mud.ore >= 10:
-				o = raw_input("Would you like to process 10 ore into building material? ")
-				if o == 'y' or o == 'yes':
-					print 'Processing raw ore into building material...'
-					Mud.ore = Mud.ore - 10
-					Mud.bmat += random.randint(1,3)
 		else:
 			print "No events to process"
-		self.show()
+		if Mud.ore >= 10:
+			o = raw_input("Would you like to process 10 ore into building material? ")
+			if o == 'y' or o == 'yes':
+				print 'Processing raw ore into building material...'
+				Mud.ore = Mud.ore - 10
+				Mud.bmat += random.randint(1,3)
 
 	def go(self):
-        	if len(Mud.ships) > 0:
+                if len(Mud.ships) == 1:
+                        print "Wooooooooosssssshh sending " + str(Mud.ships[0]) + " to space!!"
+                        Mud.space.append(Mud.ships.pop(0))
+        	if len(Mud.ships) > 1:
                 	sel = prompt_index(Mud.ships, "space")
+                        print "Wooooooooosssssshh sending " + str(Mud.ships[sel]) + " to space!!"
 	                Mud.space.append(Mud.ships.pop(sel))
-			self.show()
 	        if random.randint(1,3) == 3:
         	        print "A space event is occurring!!"
                 	Mud.newEvent(10)
