@@ -22,12 +22,16 @@ class Mud:
 
 class Actions:
 	def dock(self):
-                if len(Mud.space) > 0:
-                    sel = prompt_index(Mud.space, "dock")
-                    Mud.ships.append(Mud.space.pop(sel))
-                    self.show()
-                else:
-                    print "No ships in space"
+            if len(Mud.space) == 1:
+                print "BEEP BEEP Docking " + str(Mud.space[0])
+                Mud.ships.append(Mud.space.pop(0))
+                return
+            if len(Mud.space) > 0:
+                sel = prompt_index(Mud.space, "dock")
+                Mud.ships.append(Mud.space.pop(sel))
+                self.show()
+            else:
+                print "No ships in space"
 
 
 	def build(self):
