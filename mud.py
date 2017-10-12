@@ -54,11 +54,13 @@ class Actions:
 		else:
 			print "No events to process"
 		if Mud.ore >= 10:
-			o = raw_input("Would you like to process 10 ore into building material? ")
-			if o == 'y' or o == 'yes':
-				print 'Processing raw ore into building material...'
-				Mud.ore = Mud.ore - 10
-				Mud.bmat += random.randint(1,3)
+			o = raw_input("How much ore would you like to process into building material? ")
+			if int(o) > 0:
+				procs = int(o) / 10
+				print 'Processing '+str(procs*10)+ ' raw ore into building material...'
+				for i in range(0, procs):
+					Mud.ore = Mud.ore - 10
+					Mud.bmat += random.randint(1,3)
 
 	def go(self):
                 if len(Mud.ships) == 1:
