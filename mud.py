@@ -111,8 +111,11 @@ def run():
 	prompt = "Dude enter something (go, build, dock, show): "
 	myInput = raw_input(prompt)
 	while myInput != 'exit' and myInput != 'bye' and myInput != 'quit':
-		method = getattr(Actions, myInput)
-		method(Actions())
+		try:
+			method = getattr(Actions, myInput)
+			method(Actions())
+		except AttributeError:
+			print "Bad Command try again"
 		myInput = raw_input(prompt)
 	print "Seeeee ya"
 
