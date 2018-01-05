@@ -1,9 +1,11 @@
-import string
-import os
 import sys
 import random
-import time
+import json
 from MyEvent import MyEvent
+
+# globals
+HELP_FILE = "help.txt"
+SAVE_FILE = ".save"
 
 
 class Mud:
@@ -56,7 +58,7 @@ class Actions:
             print "No events to process"
         if Mud.ore >= 10:
             o = raw_input("How much ore would you like to process into building material? ")
-            if int(o) > 0:
+            if 0 < int(o) <= Mud.ore:
                 procs = int(o) / 10
                 print 'Processing ' + str(procs * 10) + ' raw ore into building material...'
                 for i in range(0, procs):
@@ -88,19 +90,61 @@ class Actions:
 
 
 def check_params():
-    if len(sys.argv) < 5:
-        print "Usage: " + str(sys.argv[0]) + " <ore> <energy> <base1-base2> <ship1-ship2>"
+    if len(sys.argv) != 2:
+        with open(HELP_FILE, 'r') as fin:
+            print fin.read()
         sys.exit()
+    else:
+        action = sys.argv[1]
+        if action == 'load':
+            load_params()
     return
 
 
 def load_params():
-    Mud.ore = int(sys.argv[1])
-    Mud.energy = int(sys.argv[2])
-    basestr = str(sys.argv[3])
-    Mud.bases = basestr.split("-")
-    shipstr = str(sys.argv[4])
-    Mud.ships = shipstr.split("-")
+    bases = []
+    ships = []
+    space = []
+    events = []
+    with open(SAVE_FILE) as json_file:
+        data = json.load(json_file)
+
+    Mud.ore = int(data['ore'])
+    Mud.bmat = int(data['bmat'])
+    Mud.energy = int(data['energy'])
+    for b in data['bases']:
+        bases.append(b)
+    Mud.bases = bases
+    for s in data['ships']:
+        ships.append(str(s))
+    Mud.ships = ships
+    for s in data['space']:
+        space.append(str(s))
+    Mud.space = space
+    for s in data['events']:
+        events.append(str(s))
+    Mud.events = events
+
+
+def save():
+    data = {}
+    data['ore'] = Mud.ore
+    data['bmat'] = Mud.bmat
+    data['energy'] = Mud.energy
+    data['bases'] = []
+    for b in Mud.bases:
+        data['bases'].append({b})
+    data['ships'] = []
+    for s in Mud.ships:
+        data['ships'].append(s)
+    data['space'] = []
+    for s in Mud.space:
+        data['space'].append(s)
+    data['events'] = []
+    for e in Mud.events:
+        data['events'].append(e)
+    with open(SAVE_FILE, 'w') as outfile:
+        json.dump(data, outfile)
 
 
 def prompt_index(mylist, actionName):
@@ -127,19 +171,19 @@ def get_abbrev(myinput):
 def run():
     prompt = 'Dude enter something: \n' \
              'go(g) - build(b) - dock(d) - show(s) - proc(p): '
-    myInput = raw_input(prompt)
-    while myInput != 'exit' and myInput != 'bye' and myInput != 'quit':
+    u_input = raw_input(prompt)
+    while u_input != 'exit' and u_input != 'bye' and u_input != 'quit':
         try:
-            myInput = get_abbrev(myInput)
-            method = getattr(Actions, myInput)
+            u_input = get_abbrev(u_input)
+            method = getattr(Actions, u_input)
             method(Actions())
         except AttributeError:
             print "Bad Command try again"
-        myInput = raw_input(prompt)
+        u_input = raw_input(prompt)
     print "Seeeee ya"
 
 
 # initialize stuff
 check_params()
-load_params()
 run()
+save()
