@@ -87,8 +87,10 @@ class Actions:
 
 def check_params():
 	if len(sys.argv) < 5:
-		print "Usage: " + str(sys.argv[0]) + " <ore> <energy> <base1-base2> <ship1-ship2>"
-		sys.exit()
+            fname = 'help.txt'
+            with open(fname, 'r') as fin:
+                print fin.read()
+	    sys.exit()
 	return
 
 def load_params():

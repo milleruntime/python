@@ -1,0 +1,3 @@
+Usage: python mud.py <ore> <energy> <base1-base2> <ship1-ship2>
+For example: 
+python mud.py 100 100 home enterprise
