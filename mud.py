@@ -55,7 +55,7 @@ class Actions:
 			print "No events to process"
 		if Mud.ore >= 10:
 			o = raw_input("How much ore would you like to process into building material? ")
-			if int(o) > 0:
+			if int(o) > 0 and int(o) <= Mud.ore:
 				procs = int(o) / 10
 				print 'Processing '+str(procs*10)+ ' raw ore into building material...'
 				for i in range(0, procs):
@@ -112,8 +112,15 @@ def run():
 	myInput = raw_input(prompt)
 	while myInput != 'exit' and myInput != 'bye' and myInput != 'quit':
 		try:
-			method = getattr(Actions, myInput)
-			method(Actions())
+                    loops = 1
+                    args = str(myInput).split(" ")
+                    myInput = args[0]
+		    method = getattr(Actions, myInput)
+                    if len(args) > 1:
+                        loops = int(args[1])
+                    while loops > 0:
+		        method(Actions())
+                        loops -= 1
 		except AttributeError:
 			print "Bad Command try again"
 		myInput = raw_input(prompt)
