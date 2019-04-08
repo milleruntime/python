@@ -28,8 +28,8 @@ if len(sys.argv) < 2:
     sys.exit()
         
 
-text = str('')
 f = sys.argv[1]
 with open(f, 'r') as fin:
-    text += fin.read()
-print 'Text = ' + strip_tags(text)
+    text = fin.readlines()
+for t in text:
+    print strip_tags(t)
