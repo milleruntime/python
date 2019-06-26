@@ -27,7 +27,7 @@ class Mud:
 class Actions:
     def dock(self):
         if len(Mud.space) == 1:
-            print "BEEP BEEP Docking " + str(Mud.space[0])
+            print("BEEP BEEP Docking " + str(Mud.space[0]))
             Mud.ships.append(Mud.space.pop(0))
             return
         if len(Mud.space) > 0:
@@ -35,15 +35,15 @@ class Actions:
             Mud.ships.append(Mud.space.pop(sel))
             self.show()
         else:
-            print "No ships in space"
+            print("No ships in space")
 
     def build(self):
         if Mud.bmat > 9:
-            p = raw_input("Enter the name of your new ship: ")
+            p = input("Enter the name of your new ship: ")
             Mud.ships.append(p)
             Mud.bmat -= 10
         else:
-            print "You don't have enough building material"
+            print("You don't have enough building material")
 
     def proc(self):
         self.process()
@@ -53,46 +53,46 @@ class Actions:
             sel = prompt_index(Mud.events, "process")
             Mud.events[sel].start()
             Mud.ore += Mud.events.pop(sel).process()
-            print 'You now have ' + str(Mud.ore) + ' ore.'
+            print('You now have ' + str(Mud.ore) + ' ore.')
         else:
-            print "No events to process"
+            print("No events to process")
         if Mud.ore >= 10:
-            o = raw_input("How much ore would you like to process into building material? ")
+            o = input("How much ore would you like to process into building material? ")
             if 0 < int(o) <= Mud.ore:
                 procs = int(o) / 10
-                print 'Processing ' + str(procs * 10) + ' raw ore into building material...'
+                print('Processing ' + str(procs * 10) + ' raw ore into building material...')
                 for i in range(0, procs):
                     Mud.ore = Mud.ore - 10
                     Mud.bmat += random.randint(1, 3)
 
     def go(self):
         if len(Mud.ships) == 1:
-            print "Wooooooooosssssshh sending " + str(Mud.ships[0]) + " to space!!"
+            print("Wooooooooosssssshh sending " + str(Mud.ships[0]) + " to space!!")
             Mud.space.append(Mud.ships.pop(0))
         if len(Mud.ships) > 1:
             sel = prompt_index(Mud.ships, "space")
-            print "Wooooooooosssssshh sending " + str(Mud.ships[sel]) + " to space!!"
+            print("Wooooooooosssssshh sending " + str(Mud.ships[sel]) + " to space!!")
             Mud.space.append(Mud.ships.pop(sel))
         if random.randint(1, 3) == 3:
-            print "A space event is occurring!!"
+            print("A space event is occurring!!")
             Mud.newEvent(10)
         else:
-            print "Nothing interesting happening"
+            print("Nothing interesting happening")
 
     def show(self):
-        print "Bases: " + str(Mud.bases)
-        print "Ships: " + str(Mud.ships)
-        print "Ore: " + str(Mud.ore)
-        print "Bmat: " + str(Mud.bmat)
-        print "Energy: " + str(Mud.energy)
-        print "Events: " + str(Mud.events)
-        print "Space: " + str(Mud.space)
+        print("Bases: " + str(Mud.bases))
+        print("Ships: " + str(Mud.ships))
+        print("Ore: " + str(Mud.ore))
+        print("Bmat: " + str(Mud.bmat))
+        print("Energy: " + str(Mud.energy))
+        print("Events: " + str(Mud.events))
+        print("Space: " + str(Mud.space))
 
 
 def check_params():
     if len(sys.argv) != 2:
         with open(HELP_FILE, 'r') as fin:
-            print fin.read()
+            print(fin.read())
         sys.exit()
     else:
         action = sys.argv[1]
@@ -150,7 +150,7 @@ def save():
 def prompt_index(mylist, actionName):
     for i, val in enumerate(mylist):
         print(i, val)
-    p = raw_input("Which (##) would you like to " + actionName + "? ")
+    p = input("Which (##) would you like to " + actionName + "? ")
     return int(p)
 
 
@@ -171,16 +171,16 @@ def get_abbrev(myinput):
 def run():
     prompt = 'Dude enter something: \n' \
              'go(g) - build(b) - dock(d) - show(s) - proc(p): '
-    u_input = raw_input(prompt)
+    u_input = input(prompt)
     while u_input != 'exit' and u_input != 'bye' and u_input != 'quit':
         try:
             u_input = get_abbrev(u_input)
             method = getattr(Actions, u_input)
             method(Actions())
         except AttributeError:
-            print "Bad Command try again"
-        u_input = raw_input(prompt)
-    print "Seeeee ya"
+            print("Bad Command try again")
+        u_input = input(prompt)
+    print("Seeeee ya")
 
 
 # initialize stuff

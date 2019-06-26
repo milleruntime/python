@@ -14,7 +14,7 @@ class MyEvent:
 		
 	def start(self):
 		started = True
-		print self.name + " event occured with power " + str(self.number)
+		print(self.name + " event occured with power " + str(self.number))
 
 	def __str__(self):
 		return self.name + " " + str(self.number)
