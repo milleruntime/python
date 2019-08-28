@@ -61,7 +61,7 @@ class Actions:
             if 0 < int(o) <= Mud.ore:
                 procs = int(o) / 10
                 print('Processing ' + str(procs * 10) + ' raw ore into building material...')
-                for i in range(0, procs):
+                for i in range(0, int(procs)):
                     Mud.ore = Mud.ore - 10
                     Mud.bmat += random.randint(1, 3)
 
@@ -121,8 +121,10 @@ def load_params():
     for s in data['space']:
         space.append(str(s))
     Mud.space = space
-    for s in data['events']:
-        events.append(str(s))
+    for e in data['events']:
+        print("Event: name= " + str(e['name']) + " num= " + str(e['number']))
+        eve = MyEvent.load(e['number'], e['name'])
+        events.append(eve)
     Mud.events = events
 
 
@@ -142,7 +144,7 @@ def save():
         data['space'].append(s)
     data['events'] = []
     for e in Mud.events:
-        data['events'].append(e)
+        data['events'].append(e.__dict__)
     with open(SAVE_FILE, 'w') as outfile:
         json.dump(data, outfile)
 
