@@ -101,6 +101,11 @@ def check_params():
     return
 
 
+def show_intro():
+    print("           ---[ Welcome to Space ]---")
+    print("              |---    ~~~     ---| ")
+
+
 def load_params():
     bases = []
     ships = []
@@ -171,8 +176,7 @@ def get_abbrev(myinput):
 
 
 def run():
-    prompt = 'Dude enter something: \n' \
-             'go(g) - build(b) - dock(d) - show(s) - proc(p): '
+    prompt = 'go(g) - build(b) - dock(d) - show(s) - proc(p): '
     u_input = input(prompt)
     while u_input != 'exit' and u_input != 'bye' and u_input != 'quit':
         try:
@@ -187,5 +191,6 @@ def run():
 
 # initialize stuff
 check_params()
+show_intro()
 run()
 save()
