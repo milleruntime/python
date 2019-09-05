@@ -77,7 +77,7 @@ def load_params(mud):
         space.append(str(s))
     mud.space = space
     for e in data['events']:
-        print("Event: name= " + str(e['name']) + " num= " + str(e['number']))
+        #print("Event: name= " + str(e['name']) + " num= " + str(e['number']))
         eve = MyEvent.load(e['number'], e['name'])
         events.append(eve)
     mud.events = events
