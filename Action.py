@@ -1,5 +1,6 @@
 # Actions class
 import random
+import time
 
 
 class Action:
@@ -7,6 +8,12 @@ class Action:
 
     def __init__(self, mud):
         self.mud = mud
+
+    def help(self):
+        print("Available commands: ")
+        for x in dir(self):
+            if not str(x).startswith('__') and x != 'mud':
+                print(x)
 
     def dock(self):
         if len(self.mud.space) == 1:
@@ -28,39 +35,51 @@ class Action:
         else:
             print("You don't have enough building material")
 
-    def proc(self):
-        self.process()
+    def proc(self, num=1):
+        self.process(num)
 
-    def process(self):
-        if len(self.mud.events) > 0:
-            sel = prompt_index(self.mud.events, "process")
-            self.mud.events[sel].start()
-            self.mud.ore += self.mud.events.pop(sel).process()
-            print('You now have ' + str(self.mud.ore) + ' ore.')
-        else:
-            print("No events to process")
-        if self.mud.ore >= 10:
-            o = input("How much ore would you like to process into building material? ")
-            if 0 < int(o) <= self.mud.ore:
-                procs = int(o) / 10
-                print('Processing ' + str(procs * 10) + ' raw ore into building material...')
-                for i in range(0, int(procs)):
-                    self.mud.ore = self.mud.ore - 10
-                    self.mud.bmat += random.randint(1, 3)
+    def process(self, num=1):
+        for n in range(0, int(num)):
+            if len(self.mud.events) > 0:
+                # index = prompt_index(self.mud.events, "process")
+                # always process first one
+                index = 0
+                self.mud.events[index].start()
+                self.mud.ore += self.mud.events.pop(index).process()
+                print('You now have ' + str(self.mud.ore) + ' ore.')
+            else:
+                print("No events to process")
+            if self.mud.ore >= 10:
+                o = input("Enter # of ore to process into building material (or Enter for ALL): ")
+                if not o:
+                    ore_to_proc = int(self.mud.ore)
+                else:
+                    ore_to_proc = int(o)
+                if 0 < ore_to_proc <= self.mud.ore:
+                    procs = ore_to_proc / 10
+                    new_bmat = 0
+                    for i in range(0, int(procs)):
+                        self.mud.ore = self.mud.ore - 10
+                        new_bmat += random.randint(1, 6)
+                    self.mud.bmat += new_bmat
+                    show_progress(2)
+                    print('Processed ' + str(procs * 10) + ' raw ore into ' + str(new_bmat) + ' building material.')
 
-    def go(self):
-        if len(self.mud.ships) == 1:
-            print("Wooooooooosssssshh sending " + str(self.mud.ships[0]) + " to space!!")
-            self.mud.space.append(self.mud.ships.pop(0))
-        if len(self.mud.ships) > 1:
-            sel = prompt_index(self.mud.ships, "space")
-            print("Wooooooooosssssshh sending " + str(self.mud.ships[sel]) + " to space!!")
-            self.mud.space.append(self.mud.ships.pop(sel))
-        if random.randint(1, 3) == 3:
-            print("A space event is occurring!!")
-            self.mud.new_event(10)
-        else:
-            print("Nothing interesting happening")
+    def go(self, num=1):
+        for n in range(0, int(num)):
+            if len(self.mud.ships) == 1:
+                print("Wooooooooosssssshh sending " + str(self.mud.ships[0]) + " to space!!")
+                self.mud.space.append(self.mud.ships.pop(0))
+            if len(self.mud.ships) > 1:
+                sel = prompt_index(self.mud.ships, "space")
+                print("Wooooooooosssssshh sending " + str(self.mud.ships[sel]) + " to space!!")
+                self.mud.space.append(self.mud.ships.pop(sel))
+            if random.randint(1, 6) > 2:
+                eve = self.mud.new_event(10)
+                print("Discovered " + eve.name + " event!")
+            else:
+                print("Nothing interesting happening")
+            show_progress(3)
 
     def show(self):
         print("Bases: " + str(self.mud.bases))
@@ -77,3 +96,10 @@ def prompt_index(my_list, action_name):
         print(i, val)
     p = input("Which (##) would you like to " + action_name + "? ")
     return int(p)
+
+
+def show_progress(seconds):
+    for c in range(0, seconds):
+        print(".", end='', flush=True)
+        time.sleep(1)
+    print()

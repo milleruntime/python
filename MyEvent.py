@@ -2,7 +2,7 @@ import random
 
 
 class MyEvent:
-    event_types = ['Cosmic', 'Alien', 'Apocolyptic', 'Discovery']
+    event_types = ['Cosmic', 'Alien', 'Tragic', 'Scientific']
 
     started = False
     number = 0
@@ -15,14 +15,13 @@ class MyEvent:
     @staticmethod
     def load(num, name):
         eve = MyEvent(num)
-        eve.started = True
         eve.number = num
         eve.name = name
         return eve
 
     def start(self):
         started = True
-        print(self.name + " event occured with power " + str(self.number))
+        print(self.name + " event occurred with power " + str(self.number))
 
     def __str__(self):
         return self.name + " " + str(self.number)

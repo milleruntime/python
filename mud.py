@@ -24,10 +24,11 @@ class Mud:
     def new_event(self, max_power):
         eve = MyEvent(max_power)
         self.events.append(eve)
-        eve.start()
+        return eve
 
 
 # returns the action class
+# no longer used
 def check_params(mud):
     """
 
@@ -61,9 +62,12 @@ def load_params(mud):
     ships = []
     space = []
     events = []
-    with open(SAVE_FILE) as json_file:
-        data = json.load(json_file)
-
+    try:
+        with open(SAVE_FILE) as json_file:
+            data = json.load(json_file)
+    except OSError:
+        print("Starting a new game!  Enter 'help' for commands.")
+        return Action(mud)
     mud.ore = int(data['ore'])
     mud.bmat = int(data['bmat'])
     mud.energy = int(data['energy'])
@@ -77,7 +81,7 @@ def load_params(mud):
         space.append(str(s))
     mud.space = space
     for e in data['events']:
-        #print("Event: name= " + str(e['name']) + " num= " + str(e['number']))
+        # print("Event: name= " + str(e['name']) + " num= " + str(e['number']))
         eve = MyEvent.load(e['number'], e['name'])
         events.append(eve)
     mud.events = events
@@ -85,11 +89,7 @@ def load_params(mud):
 
 
 def save(mud):
-    data = {}
-    data['ore'] = mud.ore
-    data['bmat'] = mud.bmat
-    data['energy'] = mud.energy
-    data['bases'] = []
+    data = {'ore': mud.ore, 'bmat': mud.bmat, 'energy': mud.energy, 'bases': []}
     for b in mud.bases:
         data['bases'].append({b})
     data['ships'] = []
@@ -105,18 +105,31 @@ def save(mud):
         json.dump(data, outfile)
 
 
-def get_abbrev(myinput):
-    if myinput.startswith('g'):
+def get_abbrev(ab):
+    if ab.startswith('g'):
         return 'go'
-    if myinput.startswith('b'):
+    if ab.startswith('b'):
         return 'build'
-    if myinput.startswith('d'):
+    if ab.startswith('d'):
         return 'dock'
-    if myinput.startswith('s'):
+    if ab.startswith('s'):
         return 'show'
-    if myinput.startswith('p'):
+    if ab.startswith('p'):
         return 'proc'
-    return myinput
+    return ab
+
+
+# split user input on space and call method on action object
+def exec_command(user_input, act_obj):
+    s = user_input.split(" ")
+    command = s[0]
+    command = get_abbrev(command)
+    method = getattr(Action, command)
+    if len(s) > 1:
+        arg = s[1]
+        method(act_obj, arg)
+    else:
+        method(act_obj)
 
 
 def run(action):
@@ -124,13 +137,11 @@ def run(action):
 
     :type action: Action
     """
-    prompt = 'go(g) - build(b) - dock(d) - show(s) - proc(p): '
+    prompt = 'Enter command: '
     u_input = input(prompt)
     while u_input != 'exit' and u_input != 'bye' and u_input != 'quit':
         try:
-            u_input = get_abbrev(u_input)
-            method = getattr(Action, u_input)
-            method(action)
+            exec_command(u_input, action)
         except AttributeError:
             print("Bad Command try again")
         u_input = input(prompt)
@@ -139,7 +150,7 @@ def run(action):
 
 # initialize stuff
 m = Mud()
-new_action = check_params(m)
+new_action = load_params(m)
 show_intro()
 run(new_action)
 save(m)
