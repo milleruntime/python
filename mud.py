@@ -2,6 +2,7 @@ import sys
 import json
 from MyEvent import MyEvent
 from Action import Action
+from termcolor import colored, cprint
 
 # globals
 HELP_FILE = "help.txt"
@@ -49,7 +50,7 @@ def check_params(mud):
 
 
 def show_intro():
-    print("           ---[ Welcome to Space ]---")
+    print(colored("           ---[ Welcome to Space ]---", "green"))
     print("              |---    ~~~     ---| ")
 
 
