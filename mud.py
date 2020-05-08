@@ -1,6 +1,7 @@
 import sys
 import json
 from MyEvent import MyEvent
+from Ship import Ship
 from Action import Action
 from termcolor import colored, cprint
 
@@ -50,8 +51,8 @@ def check_params(mud):
 
 
 def show_intro():
-    print(colored("           ---[ Welcome to Space ]---", "green"))
-    print("              |---    ~~~     ---| ")
+    print(colored("      ---[ Welcome to Space Fleet ]---", "green"))
+    print(colored("         |---       ~~~        ---| ", "green"))
 
 
 def load_params(mud):
@@ -76,14 +77,13 @@ def load_params(mud):
         bases.append(b)
     mud.bases = bases
     for s in data['ships']:
-        ships.append(str(s))
+        ships.append(Ship.load(s))
     mud.ships = ships
     for s in data['space']:
-        space.append(str(s))
+        space.append(Ship.load(s))
     mud.space = space
     for e in data['events']:
-        # print("Event: name= " + str(e['name']) + " num= " + str(e['number']))
-        eve = MyEvent.load(e['number'], e['name'])
+        eve = MyEvent.load(e)
         events.append(eve)
     mud.events = events
     return Action(mud)
@@ -95,10 +95,10 @@ def save(mud):
         data['bases'].append({b})
     data['ships'] = []
     for s in mud.ships:
-        data['ships'].append(s)
+        data['ships'].append(s.__dict__)
     data['space'] = []
     for s in mud.space:
-        data['space'].append(s)
+        data['space'].append(s.__dict__)
     data['events'] = []
     for e in mud.events:
         data['events'].append(e.__dict__)

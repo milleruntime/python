@@ -1,6 +1,7 @@
 # Actions class
 import random
 import time
+from Ship import Ship
 
 
 class Action:
@@ -31,10 +32,11 @@ class Action:
     def build(self):
         do_event(self.mud)
         if self.mud.bmat > 9:
-            p = input("Enter the name of your new ship: ")
-            self.mud.ships.append(p)
+            ship_name = input("Enter the name of your new ship: ")
+            new_ship = Ship(ship_name, 1)
+            self.mud.ships.append(new_ship)
             self.mud.bmat -= 10
-            print("Congratulations!!!  You successfully built the ship " + str(p))
+            print("Congratulations!!!  You successfully built the ship " + new_ship.name)
             display_ship()
         else:
             print("You don't have enough building material")
@@ -65,19 +67,24 @@ class Action:
     def go(self, num=1):
         do_event(self.mud)
         for n in range(0, int(num)):
-            if len(self.mud.ships) == 1:
-                ship_index = 0
-            elif len(self.mud.ships) > 1:
-                ship_index = prompt_index(self.mud.ships, "space")
+            if len(self.mud.space) > 0:
+                for i, s in enumerate(self.mud.space):
+                    print(str(s) + " flying through space")
             else:
-                print("No ships yet so sending probe...")
-                eve = self.mud.new_event(10)
-                print("Discovered " + eve.name + " event!")
-                show_progress(1)
-                continue
-            print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index]) + " to space!!")
-            sel_ship = self.mud.ships.pop(ship_index)
-            self.mud.space.append(sel_ship)
+                if len(self.mud.ships) == 1:
+                    ship_index = 0
+                elif len(self.mud.ships) > 1:
+                    ship_index = prompt_index(self.mud.ships, "space")
+                else:
+                    print("No ships yet so sending probe...")
+                    eve = self.mud.new_event(10)
+                    print("Discovered " + eve.name + " event!")
+                    show_progress(1)
+                    continue
+                print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index]) + " to space!!")
+                sel_ship = self.mud.ships.pop(ship_index)
+                self.mud.space.append(sel_ship)
+            # get a new event
             if random.randint(1, 6) > 2:
                 eve = self.mud.new_event(10)
                 print("Discovered " + eve.name + " event!")
@@ -85,14 +92,20 @@ class Action:
                 print("Nothing interesting happening")
             show_progress(3)
 
-    def show(self):
-        print("Ore: " + str(self.mud.ore))
-        print("Bmat: " + str(self.mud.bmat))
-        print("Energy: " + str(self.mud.energy))
-        print("Bases: " + str(self.mud.bases))
-        print("Ships: " + str(self.mud.ships))
-        print("Events: " + str(self.mud.events))
-        print("Space: " + str(self.mud.space))
+    def show(self, arg="none"):
+        if arg == "none":
+            print("Ore: " + str(self.mud.ore))
+            print("Bmat: " + str(self.mud.bmat))
+            print("Energy: " + str(self.mud.energy))
+            print("Bases: " + str(self.mud.bases))
+            print("Ships: " + str(self.mud.ships))
+            # print("Events: " + str(self.mud.events))
+            print("Space: " + str(self.mud.space))
+        elif arg in self.mud.ships:
+            ship = Ship(arg, 1)
+            print("Show ship... " + str(ship))
+        elif arg in self.mud.bases:
+            print("Showing base " + str(arg))
 
 
 def prompt_index(my_list, action_name):

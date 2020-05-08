@@ -17,12 +17,11 @@ class MyEvent:
         self.number = get_power(self.name, num)
         self.short_name = short_names[event_index]
 
-
     @staticmethod
-    def load(num, name):
+    def load(json_str):
         eve = MyEvent(1)
-        eve.number = num
-        eve.name = name
+        eve.number = json_str['number']
+        eve.name = json_str['name']
         return eve
 
     def start(self):
