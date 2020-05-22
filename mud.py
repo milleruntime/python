@@ -13,15 +13,13 @@ SAVE_FILE = ".save"
 class Mud:
 
     def __init__(self):
-        pass
-
-    ore = 0
-    bmat = 0
-    energy = 0
-    bases = []
-    ships = []
-    space = []
-    events = []
+        self.ore = 0
+        self.bmat = 0
+        self.energy = 0
+        self.bases = []
+        self.ships = []
+        self.space = []
+        self.events = []
 
     def new_event(self, max_power):
         eve = MyEvent(max_power)

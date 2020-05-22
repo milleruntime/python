@@ -2,11 +2,9 @@
 import random
 import time
 from Ship import Ship
-
+from MyEvent import MyEvent
 
 class Action:
-    mud = []
-
     def __init__(self, mud):
         self.mud = mud
 
@@ -85,11 +83,9 @@ class Action:
                 sel_ship = self.mud.ships.pop(ship_index)
                 self.mud.space.append(sel_ship)
             # get a new event
-            if random.randint(1, 6) > 2:
-                eve = self.mud.new_event(10)
-                print("Discovered " + eve.name + " event!")
-            else:
-                print("Nothing interesting happening")
+            eve = self.mud.new_event(10)
+            assert isinstance(eve, MyEvent)
+            print("Discovered " + eve.name() + " event!")
             show_progress(3)
 
     def show(self, arg="none"):
