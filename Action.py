@@ -14,16 +14,17 @@ class Action:
             if not str(x).startswith('__') and x != 'mud':
                 print(x)
 
-    def dock(self):
+    def dock(self, ship_name="none"):
         do_event(self.mud)
-        if len(self.mud.space) == 1:
-            print("BEEP BEEP Docking " + str(self.mud.space[0]))
-            self.mud.ships.append(self.mud.space.pop(0))
-            return
         if len(self.mud.space) > 0:
-            sel = prompt_index(self.mud.space, "dock")
+            if len(self.mud.space) == 1:
+                sel = 0
+            else:
+                sel = find_name(self.mud.space, ship_name)
+            if sel < 0:
+                sel = prompt_index(self.mud.space, "dock")
+            print("BEEP BEEP Docking " + str(self.mud.space[sel]))
             self.mud.ships.append(self.mud.space.pop(sel))
-            self.show()
         else:
             print("No ships in space")
 
@@ -69,24 +70,30 @@ class Action:
                 for i, s in enumerate(self.mud.space):
                     print(str(s) + " flying through space")
             else:
-                if len(self.mud.ships) == 1:
-                    ship_index = 0
-                elif len(self.mud.ships) > 1:
-                    ship_index = prompt_index(self.mud.ships, "space")
-                else:
-                    print("No ships yet so sending probe...")
-                    eve = self.mud.new_event(10)
-                    print("Discovered " + eve.name + " event!")
-                    show_progress(1)
-                    continue
-                print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index].name) + " to space!!")
-                sel_ship = self.mud.ships.pop(ship_index)
-                self.mud.space.append(sel_ship)
+                print("No ships in space.")
+                return
             # get a new event
             eve = self.mud.new_event(10)
             assert isinstance(eve, MyEvent)
             print("Discovered " + eve.name() + " event!")
             show_progress(3)
+
+    def launch(self, ship_name="none"):
+        ship_index = find_name(self.mud.ships, ship_name)
+        if ship_index < 0:
+            if len(self.mud.ships) == 1:
+                ship_index = 0
+            elif len(self.mud.ships) > 1:
+                ship_index = prompt_index(self.mud.ships, "space")
+            else:
+                print("No ships yet so sending probe...")
+                eve = self.mud.new_event(10)
+                print("Discovered " + eve.name + " event!")
+                show_progress(1)
+                return
+        print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index].name) + " to space!!")
+        sel_ship = self.mud.ships.pop(ship_index)
+        self.mud.space.append(sel_ship)
 
     def show(self, arg="none"):
         if arg == "none":
@@ -131,6 +138,14 @@ def show_progress(seconds):
         print(".", end='', flush=True)
         time.sleep(1)
     print()
+
+
+# look for the name in the list and return index
+def find_name(search_list, search_name):
+    for i, val in enumerate(search_list):
+        if search_name == val.name:
+            return i
+    return -1
 
 
 def display_ship():
