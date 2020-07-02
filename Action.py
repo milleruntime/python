@@ -79,7 +79,7 @@ class Action:
                     print("Discovered " + eve.name + " event!")
                     show_progress(1)
                     continue
-                print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index]) + " to space!!")
+                print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index].name) + " to space!!")
                 sel_ship = self.mud.ships.pop(ship_index)
                 self.mud.space.append(sel_ship)
             # get a new event
@@ -94,9 +94,12 @@ class Action:
             print("Bmat: " + str(self.mud.bmat))
             print("Energy: " + str(self.mud.energy))
             print("Bases: " + str(self.mud.bases))
-            print("Ships: " + str(self.mud.ships))
-            # print("Events: " + str(self.mud.events))
-            print("Space: " + str(self.mud.space))
+            print("Ships: ")
+            for i, val in enumerate(self.mud.ships):
+                print(" " + str(val))
+            print("Space: ")
+            for i, val in enumerate(self.mud.space):
+                print(" " + str(val))
         elif arg in self.mud.ships:
             ship = Ship(arg, 1)
             print("Show ship... " + str(ship))
