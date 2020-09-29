@@ -4,6 +4,7 @@ import time
 from Ship import Ship
 from MyEvent import MyEvent
 
+
 class Action:
     def __init__(self, mud):
         self.mud = mud
@@ -63,6 +64,21 @@ class Action:
         else:
             print("Not enough ore to process. Only have " + str(self.mud.ore))
 
+    # if no user input, process all, otherwise process number passed in
+    def refine(self, num=0):
+        if self.mud.ore >= 10:
+            if int(num) == 0:
+                ore_to_proc = int(self.mud.ore)
+            else:
+                ore_to_proc = int(num)
+            if 0 < ore_to_proc <= self.mud.ore:
+                new_fuel = ore_to_proc * 3
+                self.mud.fuel += new_fuel
+                show_progress(2)
+                print('Refined ' + str(ore_to_proc) + ' raw ore into ' + str(new_fuel) + ' fuel.')
+        else:
+            print("Not enough ore to process. Only have " + str(self.mud.ore))
+
     def go(self, num=1):
         do_event(self.mud)
         for n in range(0, int(num)):
@@ -99,7 +115,7 @@ class Action:
         if arg == "none":
             print("Ore: " + str(self.mud.ore))
             print("Bmat: " + str(self.mud.bmat))
-            print("Energy: " + str(self.mud.energy))
+            print("Fuel: " + str(self.mud.fuel))
             print("Bases: " + str(self.mud.bases))
             print("Ships: ")
             for i, val in enumerate(self.mud.ships):

@@ -15,7 +15,7 @@ class Mud:
     def __init__(self):
         self.ore = 0
         self.bmat = 0
-        self.energy = 0
+        self.fuel = 0
         self.bases = []
         self.ships = []
         self.space = []
@@ -70,7 +70,7 @@ def load_params(mud):
         return Action(mud)
     mud.ore = int(data['ore'])
     mud.bmat = int(data['bmat'])
-    mud.energy = int(data['energy'])
+    mud.fuel = int(data['fuel'])
     for b in data['bases']:
         bases.append(b)
     mud.bases = bases
@@ -88,7 +88,7 @@ def load_params(mud):
 
 
 def save(mud):
-    data = {'ore': mud.ore, 'bmat': mud.bmat, 'energy': mud.energy, 'bases': []}
+    data = {'ore': mud.ore, 'bmat': mud.bmat, 'fuel': mud.fuel, 'bases': []}
     for b in mud.bases:
         data['bases'].append({b})
     data['ships'] = []
