@@ -24,7 +24,10 @@ class Action:
                 sel = find_name(self.mud.space, ship_name)
             if sel < 0:
                 sel = prompt_index(self.mud.space, "dock")
-            print("BEEP BEEP Docking " + str(self.mud.space[sel]))
+            s = self.mud.space[sel]
+            self.mud.fuel += s.fuel
+            s.dock_ship()
+            print("BEEP BEEP Docking " + str(s))
             self.mud.ships.append(self.mud.space.pop(sel))
         else:
             print("No ships in space")
@@ -66,13 +69,13 @@ class Action:
 
     # if no user input, process all, otherwise process number passed in
     def refine(self, num=0):
-        if self.mud.ore >= 10:
+        if self.mud.ore > 0:
             if int(num) == 0:
                 ore_to_proc = int(self.mud.ore)
             else:
                 ore_to_proc = int(num)
             if 0 < ore_to_proc <= self.mud.ore:
-                new_fuel = ore_to_proc * 3
+                new_fuel = ore_to_proc * 2
                 self.mud.fuel += new_fuel
                 show_progress(2)
                 print('Refined ' + str(ore_to_proc) + ' raw ore into ' + str(new_fuel) + ' fuel.')
@@ -84,7 +87,8 @@ class Action:
         for n in range(0, int(num)):
             if len(self.mud.space) > 0:
                 for i, s in enumerate(self.mud.space):
-                    print(str(s) + " flying through space")
+                    s.go(1)
+                    print(str(s.name) + " flying through space")
             else:
                 print("No ships in space.")
                 return
@@ -107,6 +111,12 @@ class Action:
                 print("Discovered " + eve.name + " event!")
                 show_progress(1)
                 return
+        f = input("How much fuel do you take? " + str(self.mud.fuel) + ": ")
+        if int(f) > self.mud.fuel:
+            print("Sorry you have " + str(self.mud.fuel) + " fuel.")
+            return
+        self.mud.ships[ship_index].refuel(int(f))
+        self.mud.fuel = self.mud.fuel - int(f)
         print("Wooooooooosssssshh sending " + str(self.mud.ships[ship_index].name) + " to space!!")
         sel_ship = self.mud.ships.pop(ship_index)
         self.mud.space.append(sel_ship)

@@ -5,7 +5,7 @@ class Ship:
     def __init__(self, p_name, p_size):
         self.name = p_name
         self.shields = 100
-        self.fuel = 100
+        self.fuel = 0
         self.size = p_size
         self.capacity = p_size * 10
         self.cargo = 0
@@ -15,11 +15,14 @@ class Ship:
                " cargo: " + str(self.cargo) + "/" + str(self.capacity) + \
                " fuel: " + str(self.fuel)
 
-    def refuel(self):
-        self.fuel = 100
+    def refuel(self, f):
+        self.fuel = f
 
     def go(self, distance):
         self.fuel = self.fuel - distance
+
+    def dock_ship(self):
+        self.fuel = 0
 
     @staticmethod
     def load(json_str):
