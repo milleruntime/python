@@ -108,7 +108,7 @@ class Action:
             else:
                 print("No ships yet so sending probe...")
                 eve = self.mud.new_event(10)
-                print("Discovered " + eve.name + " event!")
+                print("Discovered " + eve.name() + " event!")
                 show_progress(1)
                 return
         f = input("How much fuel do you take? " + str(self.mud.fuel) + ": ")
