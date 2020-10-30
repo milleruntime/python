@@ -1,1 +1,53 @@
-{"ore": 7, "bmat": 80, "energy": 0, "bases": [], "ships": [], "space": [{"name": "Toby", "shields": 100, "fuel": 100, "size": 1, "capacity": 10, "cargo": 0}], "events": [{"name": "\u001b[34mAlien\u001b[0m", "number": 16, "short_name": "\u001b[34mAli\u001b[0m"}, {"name": "\u001b[31mTragic\u001b[0m", "number": -10, "short_name": "\u001b[31mTra\u001b[0m"}, {"name": "\u001b[34mAlien\u001b[0m", "number": 2, "short_name": "\u001b[34mAli\u001b[0m"}]}
+{
+  "ore": 6,
+  "bmat": 9,
+  "fuel": 12,
+  "bases": [],
+  "ships": [
+    {
+      "name": "Barry",
+      "shields": 100,
+      "fuel": 0,
+      "size": 1,
+      "capacity": 10,
+      "cargo": 0
+    }
+  ],
+  "space": [
+    {
+      "name": "Frank",
+      "shields": 100,
+      "fuel": 59,
+      "size": 1,
+      "capacity": 10,
+      "cargo": 0
+    }
+  ],
+  "events": [
+    {
+      "event_index": 0,
+      "max_power": 10,
+      "power": 10
+    },
+    {
+      "event_index": 2,
+      "max_power": 10,
+      "power": -7
+    },
+    {
+      "event_index": 0,
+      "max_power": 10,
+      "power": 8
+    },
+    {
+      "event_index": 2,
+      "max_power": 10,
+      "power": -10
+    },
+    {
+      "event_index": 2,
+      "max_power": 10,
+      "power": -1
+    }
+  ]
+}
