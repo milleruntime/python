@@ -111,7 +111,7 @@ class Action:
                 print("Discovered " + eve.name() + " event!")
                 show_progress(1)
                 return
-        f = input("How much fuel do you take? " + str(self.mud.fuel) + ": ")
+        f = prompt_number("How much fuel do you take? " + str(self.mud.fuel) + ": ", self.mud.fuel)
         if int(f) > self.mud.fuel:
             print("Sorry you have " + str(self.mud.fuel) + " fuel.")
             return
@@ -141,10 +141,34 @@ class Action:
 
 
 def prompt_index(my_list, action_name):
+    p_num = 0
     for i, val in enumerate(my_list):
         print(i, val)
-    p = input("Which (##) would you like to " + action_name + "? ")
-    return int(p)
+    while True:
+        p = input("Which (##) would you like to " + action_name + "? ")
+        try:
+            p_num = int(p)
+            break
+        except ValueError:
+            print("Please input a number.")
+            continue
+    return p_num
+
+
+def prompt_number(message, default_value=0):
+    p_num = default_value
+    while True:
+        try:
+            p = input(message)
+            # take the default value when none is entered
+            if not p and not default_value==0:
+                break
+            p_num = int(p)
+            break
+        except ValueError:
+            print("Please input a number.")
+            continue
+    return p_num
 
 
 def do_event(mud):
