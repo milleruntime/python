@@ -32,17 +32,20 @@ class Action:
         else:
             print("No ships in space")
 
-    def build(self):
+    def build(self, build_type="ship"):
         do_event(self.mud)
-        if self.mud.bmat > 9:
-            ship_name = input("Enter the name of your new ship: ")
-            new_ship = Ship(ship_name, 1)
-            self.mud.ships.append(new_ship)
-            self.mud.bmat -= 10
-            print("Congratulations!!!  You successfully built the ship " + new_ship.name)
-            display_ship()
+        if build_type == "ship":
+            if self.mud.bmat > 9:
+                ship_name = input("Enter the name of your new ship: ")
+                new_ship = Ship(ship_name, 1)
+                self.mud.ships.append(new_ship)
+                self.mud.bmat -= 10
+                print("Congratulations!!!  You successfully built the ship " + new_ship.name)
+                display_ship()
+            else:
+                print("You don't have enough building material")
         else:
-            print("You don't have enough building material")
+            print("You want to build a base?!?")
 
     def proc(self, num=0):
         self.process(num)
@@ -133,11 +136,14 @@ class Action:
             print("Space: ")
             for i, val in enumerate(self.mud.space):
                 print(" " + str(val))
-        elif arg in self.mud.ships:
-            ship = Ship(arg, 1)
-            print("Show ship... " + str(ship))
-        elif arg in self.mud.bases:
-            print("Showing base " + str(arg))
+        else:
+            ship_name = arg
+            ship_index = find_name(self.mud.ships, ship_name)
+            if ship_index > -1:
+                my_ship = self.mud.ships[ship_index]
+                print(str(my_ship))
+            else:
+                print("Sorry don't know that ship.")
 
 
 def prompt_index(my_list, action_name):
