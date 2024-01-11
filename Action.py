@@ -25,7 +25,6 @@ class Action:
             if sel < 0:
                 sel = prompt_index(self.mud.space, "dock")
             s = self.mud.space[sel]
-            self.mud.fuel += s.fuel
             s.dock_ship()
             print("BEEP BEEP Docking " + str(s))
             self.mud.ships.append(self.mud.space.pop(sel))
@@ -91,7 +90,6 @@ class Action:
             if len(self.mud.space) > 0:
                 for i, s in enumerate(self.mud.space):
                     s.go(1)
-                    print(str(s.name) + " flying through space")
             else:
                 print("No ships in space.")
                 return
