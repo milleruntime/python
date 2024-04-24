@@ -21,9 +21,11 @@ class Ship:
     def go(self, distance):
         if self.fuel < distance:
             print("Not enough fuel!")
+            return False
         else:
             self.fuel = self.fuel - distance
             print(str(self.name) + " flying through space")
+            return True
 
     def dock_ship(self):
         self.fuel = 0
