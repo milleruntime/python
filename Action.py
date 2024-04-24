@@ -89,15 +89,15 @@ class Action:
         for n in range(0, int(num)):
             if len(self.mud.space) > 0:
                 for i, s in enumerate(self.mud.space):
-                    s.go(1)
+                    if (s.go(1)):
+                         # get a new event
+                         eve = self.mud.new_event(10)
+                         assert isinstance(eve, MyEvent)
+                         print("Discovered " + eve.name() + " event!")
+                         show_progress(3)
             else:
                 print("No ships in space.")
                 return
-            # get a new event
-            eve = self.mud.new_event(10)
-            assert isinstance(eve, MyEvent)
-            print("Discovered " + eve.name() + " event!")
-            show_progress(3)
 
     def launch(self, ship_name="none"):
         ship_index = find_name(self.mud.ships, ship_name)
