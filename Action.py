@@ -34,15 +34,15 @@ class Action:
     def build(self, build_type="ship"):
         do_event(self.mud)
         if build_type == "ship":
-            if self.mud.bmat > 9:
+            if self.mud.met > 9:
                 ship_name = input("Enter the name of your new ship: ")
                 new_ship = Ship(ship_name, 1)
                 self.mud.ships.append(new_ship)
-                self.mud.bmat -= 10
+                self.mud.met -= 10
                 print("Congratulations!!!  You successfully built the ship " + new_ship.name)
                 display_ship()
             else:
-                print("You don't have enough building material")
+                print("You don't have enough Metal")
         else:
             print("You want to build a base?!?")
 
@@ -51,23 +51,8 @@ class Action:
 
     # if no user input, process all, otherwise process number passed in
     def process(self, num=0):
+        print("Analyzing events taking place in the galaxy...")
         do_event(self.mud)
-        if self.mud.ore >= 10:
-            if int(num) == 0:
-                ore_to_proc = int(self.mud.ore)
-            else:
-                ore_to_proc = int(num)
-            if 0 < ore_to_proc <= self.mud.ore:
-                procs = ore_to_proc / 10
-                new_bmat = 0
-                for i in range(0, int(procs)):
-                    self.mud.ore = self.mud.ore - 10
-                    new_bmat += random.randint(1, 6)
-                self.mud.bmat += new_bmat
-                show_progress(2)
-                print('Processed ' + str(procs * 10) + ' raw ore into ' + str(new_bmat) + ' building material.')
-        else:
-            print("Not enough ore to process. Only have " + str(self.mud.ore))
 
     # if no user input, process all, otherwise process number passed in
     def refine(self, num=0):
@@ -108,6 +93,7 @@ class Action:
                 ship_index = prompt_index(self.mud.ships, "space")
             else:
                 print("No ships yet so sending probe...")
+                self.mudl.fuel -= 1
                 eve = self.mud.new_event(10)
                 print("Discovered " + eve.name() + " event!")
                 show_progress(1)
@@ -125,8 +111,10 @@ class Action:
     def show(self, arg="none"):
         if arg == "none":
             print("Ore: " + str(self.mud.ore))
-            print("Bmat: " + str(self.mud.bmat))
+            print("Gas: " + str(self.mud.gas))
+            print("Metal: " + str(self.mud.met))
             print("Fuel: " + str(self.mud.fuel))
+            print("Crystals: " + str(self.mud.cry))
             print("Bases: " + str(self.mud.bases))
             print("Ships: ")
             for i, val in enumerate(self.mud.ships):
