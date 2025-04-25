@@ -14,8 +14,10 @@ class Mud:
 
     def __init__(self):
         self.ore = 0
-        self.bmat = 0
+        self.met = 0
+        self.gas = 0
         self.fuel = 0
+        self.cry = 0
         self.bases = []
         self.ships = []
         self.space = []
@@ -69,7 +71,9 @@ def load_params(mud):
         print("Starting a new game!  Enter 'help' for commands.")
         return Action(mud)
     mud.ore = int(data['ore'])
-    mud.bmat = int(data['bmat'])
+    mud.met = int(data['met'])
+    mud.cry = int(data['cry'])
+    mud.gas = int(data['gas'])
     mud.fuel = int(data['fuel'])
     for b in data['bases']:
         bases.append(b)
@@ -88,7 +92,7 @@ def load_params(mud):
 
 
 def save(mud):
-    data = {'ore': mud.ore, 'bmat': mud.bmat, 'fuel': mud.fuel, 'bases': []}
+    data = {'ore': mud.ore, 'met': mud.met, 'cry': mud.cry, 'gas': mud.gas, 'fuel': mud.fuel, 'bases': []}
     for b in mud.bases:
         data['bases'].append({b})
     data['ships'] = []
@@ -104,25 +108,10 @@ def save(mud):
         json.dump(data, outfile)
 
 
-def get_abbrev(ab):
-    if ab.startswith('g'):
-        return 'go'
-    if ab.startswith('b'):
-        return 'build'
-    if ab.startswith('d'):
-        return 'dock'
-    if ab.startswith('s'):
-        return 'show'
-    if ab.startswith('p'):
-        return 'proc'
-    return ab
-
-
 # split user input on space and call method on action object
 def exec_command(user_input, act_obj):
     s = user_input.split(" ")
     command = s[0]
-    command = get_abbrev(command)
     method = getattr(Action, command)
     if len(s) > 1:
         arg = s[1]
