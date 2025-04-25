@@ -1,4 +1,4 @@
-Usage: python mud.py <load|new>
-For example:
-    python mud.py new       # creates new game
-    python mud.py load      # Loads previous game
+Usage: python mud.py
+Mine ore. Process ore into metal. Use metal to build.
+Refine gas into fuel.
+Crystals can be found and used to power bases?
